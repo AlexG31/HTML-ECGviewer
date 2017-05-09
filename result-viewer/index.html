@@ -2,15 +2,31 @@
 <head>
  <!-- Bootstrap -->
  <link id="bootstrap_css" href="http://192.168.1.193/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
 </head>
 <body>
 
 <div class="row-fluid">
-	<div class="span3 offset3" >
+	<div class="span6" >
 		<h1 id="title">Image title </h1>
 	</div>
     <div class="span3 offset1">
-		<h1>Description </h1>
+		<h1 id="data_type">Data:All </h1>
+
+		<div class="dropdown">
+		  <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 100%;">
+		    Dropdown
+		    <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		    <li><a href="#" onclick="data_prefix('currentImages')">Current</a></li>
+		    <li><a href="#" onclick="data_prefix('shortQT')">ShortQT</a></li>
+		    <li><a href="#">All</a></li>
+		    <li><a href="#">Failed</a></li>
+		    <li role="separator" class="divider"></li>
+		    <li><a href="#">Separated link</a></li>
+		  </ul>
+		</div>
 	</div>
 
 	<div class="span9"></div>
@@ -29,7 +45,7 @@
 </div>
 
 <script id="jquery_js" src="http://192.168.1.193/jquery-3.2.1.min.js"></script>
-
+<script src="http://192.168.1.193/bootstrap/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 var serverADDR = 'http://192.168.1.193/'
@@ -48,11 +64,11 @@ var record_list = [serverADDR + '54722.png',]
 var record_index = 0
 
 $.getJSON(serverADDR + "output.json", function(json) {
-	    console.log(json); // this will show the info it in firebug console
-	    record_list = json
-	    element.src = serverADDR + record_list[0];
-	    element_title.innerHTML = record_list[0]
-	});
+    console.log(json); // this will show the info it in firebug console
+    record_list = json
+    element.src = serverADDR + record_list[0];
+    element_title.innerHTML = record_list[0]
+});
 
 
 function next_record() {
@@ -65,6 +81,7 @@ function next_record() {
 	element.src = serverADDR + record_name
 	element_title.innerHTML = record_name
 }
+
 function prev_record() {
 
 	if (record_index  == 0) {
@@ -75,6 +92,37 @@ function prev_record() {
 	element.src = serverADDR + record_name
 	element_title.innerHTML = record_name
 	
+}
+
+function data_current() {
+
+	var data_type = document.getElementById("data_type");
+	data_type.innerHTML = 'Data:Current'
+
+	record_list = ['currentImages/37807.png',]
+	record_index = 0
+	element.src = serverADDR + record_list[0];
+    element_title.innerHTML = record_list[0]
+}
+
+function data_prefix(prefix) {
+
+	// var prefix = 'shortQT'
+
+	var data_type = document.getElementById("data_type");
+	data_type.innerHTML = 'Data:' + prefix
+
+	$.getJSON(serverADDR + prefix + "/" + "pnglist.json", function(json) {
+	    console.log(json); // this will show the info it in firebug console
+	    record_list = []
+	    for (var pngname in json) {
+	    	record_list.push(prefix + '/' + json[pngname])
+	    }
+	    console.log(record_list)
+		record_index = 0
+	    element.src = serverADDR + record_list[0];
+	    element_title.innerHTML = record_list[0]
+	});
 }
 
 </script>
