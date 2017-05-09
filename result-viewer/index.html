@@ -1,30 +1,64 @@
 <html>
+<head>
+ <!-- Bootstrap -->
+ <link id="bootstrap_css" href="http://192.168.1.193/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
 <body>
 
-    <h1>Image title </h1>
-    <div>
-    	<img id="image" src='' style="width:100%;"> </img>
+<div class="row-fluid">
+	<div class="span3 offset3">
+		<h1>Image title </h1>
+	</div>
+    <div class="span3 offset1">
+		<h1>Description </h1>
+	</div>
+
+	<div class="span9"></div>
+
+    <div class="span10 offset1">
+    	<img id="image" class="img-polaroid" src='' style="width:100%;"> </img>
     </div>
 
-    <div>
-    	<button onclick="next_record()">Next</button>
+	<div class="span9"></div>
+    <div class="span4 offset2">
+    	<button class="btn btn-info btn-large" onclick="next_record()">Next</button>
     </div>
+</div>
 
-<script src="/home/alex/LabGit/ECG_random_walk/experiments/record_test/results/P-images//jquery-3.2.1.min.js"></script>
+<script id="jquery_js" src="http://192.168.1.193/jquery-3.2.1.min.js"></script>
+
 
 <script type="text/javascript">
+var serverADDR = 'http://192.168.1.193/'
+
+// Modify includes
+// var bootstrap_css=document.getElementById("bootstrap_css");
+// bootstrap_css.href = serverADDR + bootstrap_css.href
+// var jquery_js=document.getElementById("jquery_js");
+// jquery_js.src = serverADDR + jquery_js.src
+
+
 
 var element=document.getElementById("image");
-element.src = '/home/alex/LabGit/ECG_random_walk/experiments/record_test/results/P-images/54722.png';
+element.src = serverADDR + '54722.png';
+var record_list = [serverADDR + '54722.png',]
+var record_index = 0
+
+$.getJSON(serverADDR + "output.json", function(json) {
+	    console.log(json); // this will show the info it in firebug console
+	    record_list = json
+	    element.src = serverADDR + record_list[0];
+	});
+
 
 function next_record() {
-	$.getJSON("/home/alex/LabGit/ECG_random_walk/experiments/record_test/results/P-images/output.json", function(json) {
-	    console.log(json); // this will show the info it in firebug console
-	    var record_list = json
-		var record_name = record_list[0]
-		var element=document.getElementById("image");
-	element.src = record_name
-	});
+
+	if (record_index + 1 == record_list.length) {
+		return;
+	}
+	record_index++
+	var record_name = record_list[record_index]
+	element.src = serverADDR + record_name
 	
 }
 </script>
