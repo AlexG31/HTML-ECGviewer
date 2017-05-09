@@ -6,8 +6,8 @@
 <body>
 
 <div class="row-fluid">
-	<div class="span3 offset3">
-		<h1>Image title </h1>
+	<div class="span3 offset3" >
+		<h1 id="title">Image title </h1>
 	</div>
     <div class="span3 offset1">
 		<h1>Description </h1>
@@ -20,8 +20,11 @@
     </div>
 
 	<div class="span9"></div>
-    <div class="span4 offset2">
-    	<button class="btn btn-info btn-large" onclick="next_record()">Next</button>
+	<div class="span4 offset2">
+    	<button class="btn btn-info btn-large" onclick="prev_record()" style="width: 100%;">Previous</button>
+    </div>
+    <div class="span4 offset1">
+    	<button class="btn btn-info btn-large" onclick="next_record()" style="width: 100%;">Next</button>
     </div>
 </div>
 
@@ -38,7 +41,7 @@ var serverADDR = 'http://192.168.1.193/'
 // jquery_js.src = serverADDR + jquery_js.src
 
 
-
+var element_title=document.getElementById("title");
 var element=document.getElementById("image");
 element.src = serverADDR + '54722.png';
 var record_list = [serverADDR + '54722.png',]
@@ -48,6 +51,7 @@ $.getJSON(serverADDR + "output.json", function(json) {
 	    console.log(json); // this will show the info it in firebug console
 	    record_list = json
 	    element.src = serverADDR + record_list[0];
+	    element_title.innerHTML = record_list[0]
 	});
 
 
@@ -59,8 +63,20 @@ function next_record() {
 	record_index++
 	var record_name = record_list[record_index]
 	element.src = serverADDR + record_name
+	element_title.innerHTML = record_name
+}
+function prev_record() {
+
+	if (record_index  == 0) {
+		return;
+	}
+	record_index--
+	var record_name = record_list[record_index]
+	element.src = serverADDR + record_name
+	element_title.innerHTML = record_name
 	
 }
+
 </script>
 
 </body>
